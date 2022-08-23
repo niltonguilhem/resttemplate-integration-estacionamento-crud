@@ -1,0 +1,8 @@
+server:
+  port: 8081
+
+## API Estacionamento CRUD ##
+api-estacionamento-crud:
+  host: http://localhost:8080/
+  path: api/v1/estacionamento/
+
