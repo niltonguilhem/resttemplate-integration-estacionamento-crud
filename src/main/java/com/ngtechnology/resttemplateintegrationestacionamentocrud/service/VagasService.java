@@ -9,7 +9,9 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @Service
@@ -23,25 +25,31 @@ public class VagasService {
     private String path;
 
     public List<Vagas> findAllVagas(){
-        List<Vagas> vagas = restTemplate.exchange(host+path, HttpMethod.GET,null,new ParameterizedTypeReference<List<Vagas>>(){}).getBody();
+        URI uri = URI.create(host+path);
+        List<Vagas> vagas = restTemplate.exchange(uri, HttpMethod.GET,null,
+                new ParameterizedTypeReference<List<Vagas>>(){}).getBody();
         return vagas;
     }
 
     public Vagas getVagasById(Long id){
-        Vagas vagas = restTemplate.getForObject(host+path+id,Vagas.class);
+        URI uri = URI.create(host+path+id);
+        Vagas vagas = restTemplate.getForObject(uri,Vagas.class);
+
         return vagas;
     }
 
     public Vagas save(Vagas vagas){
+        URI uri = URI.create(host+path);
         ResponseEntity<Vagas> vagasEntity =
-                restTemplate.postForEntity(host+path,vagas,Vagas.class);
+                restTemplate.postForEntity(uri,vagas,Vagas.class);
         return vagasEntity.getBody();
     }
 
     public Vagas update(Vagas vagas, Long id) {
         HttpEntity requesEntity = new HttpEntity<>(vagas);
+        URI uri = URI.create(host+path+id);
         ResponseEntity<Vagas> vagasEntity =
-                restTemplate.exchange(host+path+id,HttpMethod.PUT,requesEntity,Vagas.class);
+                restTemplate.exchange(uri,HttpMethod.PUT,requesEntity,Vagas.class);
         return vagasEntity.getBody();
 
     }
