@@ -7,18 +7,23 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.awt.*;
 import java.net.URI;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+;
 
 @Service
 public class VagasService {
-    private static final Logger logger = LoggerFactory.getLogger(RestTemplateIntegration.class);
+    private static final Logger logger = LoggerFactory.getLogger(VagasService.class);
     @Autowired
     private RestTemplateIntegration restTemplate;
     @Value("${api-estacionamento-crud.host}")
@@ -50,24 +55,53 @@ public class VagasService {
         return vagas;
     }
 
-
-    public Vagas save(Vagas vagas) {
+    /*public Vagas save(Vagas vagas) {
         logger.info("m=save - status=start");
+        HttpEntity requestEntity = new HttpEntity<>(vagas);
         URI uri = URI.create(host + path);
         ResponseEntity<Vagas> vagasEntity =
-                restTemplate.postForEntity(uri, vagas, Vagas.class);
+                restTemplate.exchange(uri,HttpMethod.POST,requestEntity, Vagas.class);
+        logger.info("m=save - status=finish");
+        return vagasEntity.getBody();
+    }*/
+    public Vagas save(Vagas vagas) {
+        logger.info("m=save - status=start");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        HttpEntity<String> requestEntity = new HttpEntity<>("Partner", headers);
+        URI uri = URI.create(host + path);
+        ResponseEntity<Vagas> vagasEntity =
+                restTemplate.exchange(uri, HttpMethod.POST, requestEntity, Vagas.class);
         logger.info("m=save - status=finish");
         return vagasEntity.getBody();
     }
 
     public Vagas update(Vagas vagas, Long id) {
-        logger.info("m=update - status=start " + vagas.getIdVaga());
-        HttpEntity requesEntity = new HttpEntity<>(vagas);
-        URI uri = URI.create(host + path + id);
-        ResponseEntity<Vagas> vagasEntity =
-                restTemplate.exchange(uri, HttpMethod.PUT, requesEntity, Vagas.class);
-        logger.info("m=update - status=finish " + vagas.getIdVaga());
-        return vagasEntity.getBody();
-
+        logger.info("m=update - status=start " + id);
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        Map<String, String> map = new HashMap<>();
+        map.put("Partner", "Star_Park");
+        HttpEntity<Void> response = restTemplate.postForEntity(host + path, map, Void.class);
+        logger.info("m=update - status=finish " + id);
+        if (((ResponseEntity<Void>) response).getStatusCode() == HttpStatus.OK) {
+            System.out.println("Request Successful");
+        } else {
+            System.out.println("Request Failed");
+        }
+        return vagas;
     }
+
+    /*public Vagas update(Vagas vagas, Long id) {
+        logger.info("m=update - status=start " + id);
+        HttpEntity requesEntity = new HttpEntity<>(vagas);
+        URI uri = URI.create(host + path);
+        ResponseEntity<Vagas> vagasEntity =
+                restTemplate.exchange(uri,HttpMethod.PUT,requesEntity,Vagas.class);
+        logger.info("m=update - status=finish " + id);
+        return vagasEntity.getBody();
+    }*/
+
 }

@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class ResttemplateIntegrationEstacionamentoCrudApplication {
 	private static Logger logger = LoggerFactory.getLogger(ResttemplateIntegrationEstacionamentoCrudApplication.class);
 	public static void main(String[] args) {
-		logger.info("Iniciando a api controle de vagas");
+		logger.info("Iniciando API controle de vagas");
 		SpringApplication.run(ResttemplateIntegrationEstacionamentoCrudApplication.class, args);
 		logger.info("API de controle de vaga iniciada e pronta para receber requisições");
 	}
