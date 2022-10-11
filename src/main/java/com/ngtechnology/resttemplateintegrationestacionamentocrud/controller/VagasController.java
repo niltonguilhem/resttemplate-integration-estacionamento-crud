@@ -54,7 +54,6 @@ public class VagasController {
             return new ResponseEntity<>(HttpStatus.OK);
         }
     }
-
     @PostMapping
     public ResponseEntity<VagasResponse> postVagas(@RequestBody VagasRequest vagasRequest,
                                                    @RequestHeader (value = "Partner") String Partner){
@@ -71,13 +70,10 @@ public class VagasController {
         logger.info("m=postVagas - status=finish " + Partner);
         return result;
     }
-
-
     @PutMapping("/{id}")
     public ResponseEntity<VagasResponse> putVagas (@PathVariable("id")Long id,
                                                    @RequestBody VagasRequest vagasRequest,
                                                    @RequestHeader(value = "Partner") String Partner){
-
         logger.info("m=putVagas - status=start " + id + " " +Partner);
         Vagas vagasUpdate = new Vagas()
                 .withBuilderVagasId(id)

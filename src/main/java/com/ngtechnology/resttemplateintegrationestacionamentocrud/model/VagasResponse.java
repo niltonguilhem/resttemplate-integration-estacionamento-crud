@@ -4,8 +4,6 @@ public class VagasResponse {
     private Long idVaga;
     private Boolean disponivel;
 
-
-
     public Long getIdVaga() {
         return idVaga;
     }
