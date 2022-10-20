@@ -49,7 +49,7 @@ public class VagasService {
     public Vagas save(Vagas vagas) {
         logger.info("m=save - status=start");
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Partner", "Star_Park");
+        headers.add("partner", "Star-Park");
         HttpEntity<Vagas> entity = new HttpEntity<>(vagas,headers);
         URI uri = URI.create(host + path);
         ResponseEntity<Vagas> vagasEntity =
@@ -60,7 +60,7 @@ public class VagasService {
     public Vagas update(Vagas vagas, Long id) {
         logger.info("m=update - status=start " + id);
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Partner", "Star_Park");
+        headers.add("partner", "Star-Park");
         HttpEntity<Vagas> entity = new HttpEntity<>(vagas,headers);
         URI uri = URI.create(host + path + id);
         ResponseEntity<Vagas> vagasEntity =

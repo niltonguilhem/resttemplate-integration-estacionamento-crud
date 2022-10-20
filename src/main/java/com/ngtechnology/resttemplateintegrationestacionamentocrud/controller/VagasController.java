@@ -4,6 +4,7 @@ import com.ngtechnology.resttemplateintegrationestacionamentocrud.model.Vagas;
 import com.ngtechnology.resttemplateintegrationestacionamentocrud.model.VagasRequest;
 import com.ngtechnology.resttemplateintegrationestacionamentocrud.model.VagasResponse;
 import com.ngtechnology.resttemplateintegrationestacionamentocrud.service.VagasService;
+import com.ngtechnology.resttemplateintegrationestacionamentocrud.utils.VagasUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,9 +57,10 @@ public class VagasController {
     }
     @PostMapping
     public ResponseEntity<VagasResponse> postVagas(@RequestBody VagasRequest vagasRequest,
-                                                   @RequestHeader (value = "Partner") String Partner){
+                                                   @RequestHeader String partner) throws Exception {
+        VagasUtils.validatedHeader(partner);
         ResponseEntity<VagasResponse> result;
-        logger.info("m=postVagas - status=start " + Partner);
+        logger.info("m=postVagas - status=start " + partner);
         Vagas vagas = service.save(new Vagas()
                 .withBuilderDisponivel(vagasRequest.getDisponivel()));
 
@@ -67,14 +69,15 @@ public class VagasController {
                 .withBuilderDisponivel(vagas.getDisponivel());
 
         result = new ResponseEntity<>(response,HttpStatus.CREATED);
-        logger.info("m=postVagas - status=finish " + Partner);
+        logger.info("m=postVagas - status=finish " + partner);
         return result;
     }
     @PutMapping("/{id}")
     public ResponseEntity<VagasResponse> putVagas (@PathVariable("id")Long id,
                                                    @RequestBody VagasRequest vagasRequest,
-                                                   @RequestHeader(value = "Partner") String Partner){
-        logger.info("m=putVagas - status=start " + id + " " +Partner);
+                                                   @RequestHeader String partner) throws Exception {
+        VagasUtils.validatedHeader(partner);
+        logger.info("m=putVagas - status=start " + id + " " + partner);
         Vagas vagasUpdate = new Vagas()
                 .withBuilderVagasId(id)
                 .withBuilderDisponivel(vagasRequest.getDisponivel());
@@ -84,7 +87,7 @@ public class VagasController {
                 .withBuilderDisponivel(vagasUpdate.getDisponivel());
 
         Vagas vagasEntity = service.update(vagasUpdate,id);
-        logger.info("m=putVagas - status=finish " + id + " " +Partner);
+        logger.info("m=putVagas - status=finish " + id + " " + partner);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 }
