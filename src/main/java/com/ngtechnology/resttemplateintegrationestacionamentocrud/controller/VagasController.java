@@ -62,7 +62,7 @@ public class VagasController {
         ResponseEntity<VagasResponse> result;
         logger.info("m=postVagas - status=start " + partner);
         Vagas vagas = service.save(new Vagas()
-                .withBuilderDisponivel(vagasRequest.getDisponivel()));
+                .withBuilderDisponivel(vagasRequest.getDisponivel()),partner);
 
         VagasResponse response = new VagasResponse()
                 .withBuilderVagasId(vagas.getIdVaga())
@@ -86,7 +86,7 @@ public class VagasController {
                 .withBuilderVagasId(vagasUpdate.getIdVaga())
                 .withBuilderDisponivel(vagasUpdate.getDisponivel());
 
-        Vagas vagasEntity = service.update(vagasUpdate,id);
+        Vagas vagasEntity = service.update(vagasUpdate,id,partner);
         logger.info("m=putVagas - status=finish " + id + " " + partner);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
